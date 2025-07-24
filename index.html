@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barbería</title>
+  </head>
+  <body>
+    <h1>Barberia</h1>
+    <section id="seccionInicio">Seccion de inicio</section>
+    <section id="seccionReservas">
+      <form action="/reservar" method="post">
+        <h2>Reservar un turno</h2>
+
+        <!-- Fecha -->
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required min="" />
+
+        <!-- Especialidad -->
+        <label for="especialidad">Especialidad:</label>
+        <select id="especialidad" name="especialidad" required>
+          <option value="">Seleccione una especialidad</option>
+          <!-- Opciones a cargar dinámicamente -->
+        </select>
+
+        <!-- Barbero -->
+        <label for="barbero">Barbero:</label>
+        <select id="barbero" name="barbero" required>
+          <option value="">Seleccione un barbero</option>
+          <!-- Opciones a cargar dinámicamente según especialidad -->
+        </select>
+
+        <!-- Nombre -->
+        <label for="nombre">Nombre completo:</label>
+        <input type="text" id="nombre" name="nombre" required />
+
+        <!-- Teléfono -->
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" required />
+
+        <!-- Email -->
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" name="email" required />
+
+        <!-- Botón de envío -->
+        <button type="submit">Confirmar reserva</button>
+      </form>
+    </section>
+    <section id="seccionBarberos">Seccion de barberos</section>
+    <section id="seccionGaleria">Seccion galeria</section>
+    <section id="seccionContacto">Seccion contacto</section>
+    <section id="seccionPrecios">Seccion precios</section>
+    <script src="script.js"></script>
+  </body>
+</html>
