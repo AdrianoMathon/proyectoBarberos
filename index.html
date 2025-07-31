@@ -3,12 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Barbería</title>
+    <title>Barbería Estilo Clásico</title>
+    <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
-    <h1>Barberia</h1>
-    <section id="seccionInicio">Seccion de inicio</section>
+    <header>
+        <figure><img src="img/logobarberia.png" alt="Logo festival Música Uruguaya"></figure>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#seccionGaleria">Galería</a></li>
+                <li><a href="#seccionBarberos">Barberos</a></li>
+                <li><a href="#seccionPrecios">Servicios</a></li>
+                <li><a href="#seccionReservas">Reservas</a></li>
+                <li><a href="#seccionContacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+      <section class="banner">
+            <h1>Tradición y estilo<br>en cada corte</h1>
+            <a href="#seccionReservas">Reservar hora</a>
+      </section>
+    
     <section id="seccionReservas">
+      <div class="contenedor-reserva">
       <h2>Reservar un turno</h2>
 
       <!-- Fecha -->
@@ -43,11 +62,13 @@
 
       <!-- Botón de envío -->
       <button type="button" id="btnReservas">Confirmar reserva</button>
+      </div>
     </section>
     <section id="seccionBarberos">Seccion de barberos</section>
     <section id="seccionGaleria">Seccion galeria</section>
     <section id="seccionContacto">Seccion contacto</section>
     <section id="seccionPrecios">Seccion precios</section>
+    </main>
     <script src="script.js"></script>
   </body>
 </html>
