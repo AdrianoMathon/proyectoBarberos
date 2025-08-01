@@ -1,74 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Barbería Estilo Clásico</title>
-    <link rel="stylesheet" href="css/styles.css">
-  </head>
-  <body>
-    <header>
-        <figure><img src="img/logobarberia.png" alt="Logo festival Música Uruguaya"></figure>
-        <nav>
-            <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#seccionGaleria">Galería</a></li>
-                <li><a href="#seccionBarberos">Barberos</a></li>
-                <li><a href="#seccionPrecios">Servicios</a></li>
-                <li><a href="#seccionReservas">Reservas</a></li>
-                <li><a href="#seccionContacto">Contacto</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-      <section class="banner">
-            <h1>Tradición y estilo<br>en cada corte</h1>
-            <a href="#seccionReservas">Reservar hora</a>
-      </section>
-    
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barbería Estilo Clásico</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header>
+    <figure><img src="img/logobarberia.png" alt="Logo festival Música Uruguaya"></figure>
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#seccionGaleria">Galería</a></li>
+        <li><a href="#seccionBarberos">Barberos</a></li>
+        <li><a href="#seccionPrecios">Servicios</a></li>
+        <li><a href="#seccionReservas">Reservas</a></li>
+        <li><a href="#seccionContacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="banner">
+      <h1>Tradición y estilo<br>en cada corte</h1>
+      <a href="#seccionReservas">Reservar hora</a>
+    </section>
+    <section id="seccionGaleria"></section>
+    <section id="seccionBarberos"></section>
+    <section id="seccionPrecios"></section>
     <section id="seccionReservas">
       <div class="contenedor-reserva">
-      <h2>Reservar un turno</h2>
+        <h2>Reservar turno</h2>
+        <!-- Fecha -->
+        <div class="contenedor-form-reservas">
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required min="" /><br />
 
-      <!-- Fecha -->
-      <label for="fecha">Fecha:</label>
-      <input type="date" id="fecha" name="fecha" required min="" /><br />
+        <!-- Servicio -->
+        <label for="servicio">Especialidad:</label>
+        <select id="txtServicio" name="servicio" required>
+          <option value="">Seleccione una especialidad</option>
+          <!-- Opciones a cargar dinámicamente -->
+        </select><br />
 
-      <!-- Servicio -->
-      <label for="servicio">Especialidad:</label>
-      <select id="txtServicio" name="servicio" required>
-        <option value="">Seleccione una especialidad</option>
-        <!-- Opciones a cargar dinámicamente --></select
-      ><br />
+        <!-- Barbero -->
+        <label for="barbero">Barbero:</label>
+        <select id="txtBarbero" name="barbero" required>
+          <option value="">Seleccione un barbero</option>
+          <!-- Opciones a cargar dinámicamente según especialidad -->
+        </select><br />
 
-      <!-- Barbero -->
-      <label for="barbero">Barbero:</label>
-      <select id="txtBarbero" name="barbero" required>
-        <option value="">Seleccione un barbero</option>
-        <!-- Opciones a cargar dinámicamente según especialidad --></select
-      ><br />
+        <!-- Nombre -->
+        <label for="nombre">Nombre completo:</label>
+        <input type="text" id="txtNombre" name="nombre" required /><br />
 
-      <!-- Nombre -->
-      <label for="nombre">Nombre completo:</label>
-      <input type="text" id="txtNombre" name="nombre" required /><br />
+        <!-- Teléfono -->
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="txtTelefono" name="telefono" required /><br />
 
-      <!-- Teléfono -->
-      <label for="telefono">Teléfono:</label>
-      <input type="tel" id="txtTelefono" name="telefono" required /><br />
+        <!-- Email -->
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="txtEmail" name="email" required /><br />
 
-      <!-- Email -->
-      <label for="email">Correo electrónico:</label>
-      <input type="email" id="txtEmail" name="email" required /><br />
-
-      <!-- Botón de envío -->
-      <button type="button" id="btnReservas">Confirmar reserva</button>
+        <!-- Botón de envío -->
+        <button type="button" id="btnReservas">Confirmar reserva</button>
+        </div>
       </div>
     </section>
-    <section id="seccionBarberos">Seccion de barberos</section>
-    <section id="seccionGaleria">Seccion galeria</section>
+
     <section id="seccionContacto">Seccion contacto</section>
-    <section id="seccionPrecios">Seccion precios</section>
-    </main>
-    <script src="script.js"></script>
-  </body>
+  </main>
+  <script src="script.js"></script>
+</body>
+
 </html>
