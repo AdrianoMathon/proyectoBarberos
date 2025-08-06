@@ -55,3 +55,31 @@ test('Debería registrar una reserva correctamente', () => {
     expect(resultado).toEqual(nuevaReserva);
     expect(localStorage.getItem('reservas')).toContain('"Pedro"');
 });
+
+test('No debería registrar una reserva si el horario ya está ocupado', () => {
+    const reserva1 = {
+        nombre: "Pedro",
+        telefono: "099123456",
+        email: "pedro@mail.com",
+        fecha: "2025-08-10",
+        horario: "10:00",
+        servicioId: 1,
+        barberoId: 1,
+    };
+
+    const reserva2 = {
+        nombre: "Juan",
+        telefono: "098654321",
+        email: "juan@mail.com",
+        fecha: "2025-08-10",
+        horario: "10:00",
+        servicioId: 1,
+        barberoId: 1,
+    };
+
+    // Registrar la primera reserva con éxito
+    registrarReserva(reserva1);
+
+    // Intentar registrar una segunda en el mismo horario y barbero
+    expect(() => registrarReserva(reserva2)).toThrow("Este horario ya no está disponible");
+});

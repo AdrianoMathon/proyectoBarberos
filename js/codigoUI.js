@@ -20,6 +20,8 @@ function misEventos() {
     
     // Cargar horarios cuando se selecciona fecha
     document.querySelector("#fecha").addEventListener("change", cargarHorariosDisponibles);
+
+    document.querySelector("#txtBarbero").addEventListener("change", cargarHorariosDisponibles);
 }
 
 // Cargar servicios en el select
@@ -67,6 +69,7 @@ function cargarBarberos() {
 function cargarHorariosDisponibles() {
     var fecha = document.querySelector("#fecha").value;
     var horarioSelect = document.querySelector("#txtHorario");
+    var barberoId = document.querySelector("#txtBarbero").value;
     
     if (!fecha) return;
     
@@ -81,23 +84,30 @@ function cargarHorariosDisponibles() {
     // Obtener reservas para esta fecha
     var reservasFecha = obtenerReservasPorFecha(fecha);
     
-    // Filtrar horarios ocupados
-    var horariosOcupados = reservasFecha.map(function(r) {
-        return r.horario;
-    });
-    
-    // Agregar horarios disponibles al select
+    // Agregar todos los horarios al select, marcando los ocupados
     todosHorarios.forEach(function(horario) {
-        if (!horariosOcupados.includes(horario)) {
-            var option = document.createElement("option");
-            option.value = horario;
-            option.textContent = horario;
-            horarioSelect.appendChild(option);
+        var option = document.createElement("option");
+        option.value = horario;
+        option.textContent = horario;
+        
+        // Verificar si el horario está ocupado para el barbero seleccionado
+        if (barberoId && barberoId !== "aleatorio") {
+            var estaOcupado = reservasFecha.some(function(r) { 
+                return r.horario === horario && r.barberoId === parseInt(barberoId);
+            });
+            
+            if (estaOcupado) {
+                option.disabled = true;
+                option.textContent += " (No disponible con este barbero)";
+            }
         }
+        
+        horarioSelect.appendChild(option);
     });
     
-    // Si no hay horarios disponibles
-    if (horarioSelect.options.length === 1) {
+    // Si no hay horarios disponibles (todos están deshabilitados)
+    var hayDisponibles = Array.from(horarioSelect.options).some(opt => !opt.disabled);
+    if (!hayDisponibles && horarioSelect.options.length > 1) {
         var option = document.createElement("option");
         option.value = "";
         option.textContent = "No hay horarios disponibles para esta fecha";
@@ -105,92 +115,94 @@ function cargarHorariosDisponibles() {
     }
 }
 
+
 // Registrar una nueva reserva desde la UI
 function registrarReservaUI() {
     // Obtener valores del formulario
-    var fecha = document.querySelector("#fecha").value;
-    var horario = document.querySelector("#txtHorario").value;
-    var servicioId = parseInt(document.querySelector("#txtServicio").value);
-    var barberoIdOrAleatorio = document.querySelector("#txtBarbero").value;
-    var nombre = document.querySelector("#txtNombre").value.trim();
-    var telefono = document.querySelector("#txtTelefono").value.trim();
-    var email = document.querySelector("#txtEmail").value.trim();
-    
+    const fecha = document.querySelector("#fecha").value;
+    const horario = document.querySelector("#txtHorario").value;
+    const servicioId = parseInt(document.querySelector("#txtServicio").value);
+    const barberoId = document.querySelector("#txtBarbero").value;
+    const nombre = document.querySelector("#txtNombre").value.trim();
+    const telefono = document.querySelector("#txtTelefono").value.trim();
+    const email = document.querySelector("#txtEmail").value.trim();
+
     // Validaciones básicas
-    if (!fecha || !horario || !servicioId || !barberoIdOrAleatorio || !nombre || !telefono || !email) {
-        alert("Por favor complete todos los campos");
+    if (!fecha || !horario || !servicioId || !barberoId || !nombre || !telefono || !email) {
+        mostrarMensaje("Por favor complete todos los campos", "error");
         return;
     }
-    
+
     if (!validarEmail(email)) {
-        alert("Por favor ingrese un email válido");
+        mostrarMensaje("Por favor ingrese un email válido", "error");
         return;
     }
-    
-    // Buscar información del servicio
-    var servicio = obtenerServicioPorId(servicioId);
-    
-    // Manejar selección de barbero (aleatorio o específico)
-    var barbero;
-    if (barberoIdOrAleatorio === "aleatorio") {
-        barbero = encontrarBarberoDisponible(servicioId, fecha, horario);
-        if (!barbero) {
-            alert("Lo sentimos, no hay barberos disponibles para este horario. Por favor seleccione otro horario.");
-            return;
-        }
-    } else {
-        barbero = obtenerBarberoPorId(parseInt(barberoIdOrAleatorio));
-        
-        // Verificar si el barbero seleccionado está disponible
-        var barberoOcupado = reservas.some(function(r) {
-            return r.fecha === fecha && 
-                   r.horario === horario && 
-                   r.barberoId === barbero.id;
-        });
-        
-        if (barberoOcupado) {
-            alert("El barbero " + barbero.nombre + " no está disponible para este horario.");
-            return;
-        }
+
+    // Obtener datos del servicio y barbero
+    const servicio = obtenerServicioPorId(servicioId);
+    const barbero = barberoId === "aleatorio" 
+        ? encontrarBarberoDisponible(servicioId, fecha, horario)
+        : obtenerBarberoPorId(parseInt(barberoId));
+
+    if (!barbero) {
+        mostrarMensaje("No hay barberos disponibles para este horario", "error");
+        return;
     }
-    
+
     // Crear objeto reserva
-    var reserva = {
-        id: Date.now(), // ID único basado en timestamp
-        fecha: fecha,
-        horario: horario,
+    const reserva = {
+        id: Date.now(),
+        fecha,
+        horario,
         servicio: servicio.nombre,
         servicioId: servicio.id,
         precio: servicio.precio,
         barbero: barbero.nombre,
         barberoId: barbero.id,
         nombreCliente: nombre,
-        telefono: telefono,
-        email: email,
+        telefono,
+        email,
         fechaRegistro: new Date().toLocaleString()
     };
-    
+
     try {
-        // Registrar la reserva
         registrarReserva(reserva);
-        
-        // Mostrar mensaje de éxito
-        alert(
-            "✅ Reserva registrada con éxito para " + nombre + "\n" +
-            "📅 Fecha: " + fecha + "\n" +
-            "⏰ Hora: " + horario + "\n" +
-            "💈 Barbero: " + barbero.nombre + "\n" +
-            "✂️ Servicio: " + servicio.nombre
+        mostrarMensaje(
+            `✅ Reserva exitosa:<br>
+            📅 ${fecha} a las ${horario}<br>
+            💈 ${barbero.nombre}<br>
+            ✂️ ${servicio.nombre}`,
+            "success"
         );
-        
-        // Limpiar formulario
-        //document.querySelector(".contenedor-form-reservas").reset();
-        
-        // Recargar horarios disponibles
-        cargarHorariosDisponibles();
     } catch (error) {
-        alert(error.message);
+        mostrarMensaje(error.message, "error");
     }
+}
+
+// Función para mostrar mensajes (mejorada)
+function mostrarMensaje(mensaje, tipo) {
+    let mensajeDiv = document.getElementById('mensaje-flotante');
+    if (!mensajeDiv) {
+        mensajeDiv = document.createElement('div');
+        mensajeDiv.id = 'mensaje-flotante';
+        mensajeDiv.style.position = 'fixed';
+        mensajeDiv.style.top = '20px';
+        mensajeDiv.style.right = '20px';
+        mensajeDiv.style.padding = '15px';
+        mensajeDiv.style.borderRadius = '5px';
+        mensajeDiv.style.zIndex = '1000';
+        mensajeDiv.style.maxWidth = '300px';
+        document.body.appendChild(mensajeDiv);
+    }
+
+    mensajeDiv.innerHTML = mensaje;
+    mensajeDiv.style.backgroundColor = tipo === 'success' ? '#4CAF50' : '#f44336';
+    mensajeDiv.style.color = 'white';
+    mensajeDiv.style.display = 'block';
+
+    setTimeout(() => {
+        mensajeDiv.style.display = 'none';
+    }, 5000);
 }
 
 // Llamar a la función principal cuando el DOM esté cargado

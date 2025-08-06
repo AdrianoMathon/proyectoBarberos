@@ -64,23 +64,21 @@ function validarEmail(email) {
 
 // Registrar una nueva reserva
 function registrarReserva(reserva) {
-    // Verificar si el horario aún está disponible
-    var horarioOcupado = reservas.some(function(r) {
-        return r.fecha === reserva.fecha && 
-               r.horario === reserva.horario && 
-               r.barberoId === reserva.barberoId;
-    });
+    // Verificar si el barbero ya tiene reserva en ese horario
+    const barberoOcupado = reservas.some(r => 
+        r.fecha === reserva.fecha && 
+        r.horario === reserva.horario && 
+        r.barberoId === reserva.barberoId
+    );
     
-    if (horarioOcupado) {
-        throw new Error("Este horario ya no está disponible");
+    if (barberoOcupado) {
+        throw new Error(`El barbero ${reserva.barbero} ya tiene una reserva a las ${reserva.horario}. 
+                       Por favor elija otro barbero u otro horario.`);
     }
     
     // Agregar a la lista de reservas
     reservas.push(reserva);
-    
-    // Guardar en localStorage
     localStorage.setItem('reservas', JSON.stringify(reservas));
-    
     return reserva;
 }
 
@@ -125,7 +123,41 @@ if (typeof module !== 'undefined') {
         generarHorarios,
         servicios,
         barberos,
+        buscarReservas,
         // expone reservas para inspección o reinicio en los tests
         __reservaData__: { reservas }
     };
 }
+
+// Obtener reservas por fecha ordenadas por hora
+function obtenerReservasPorFecha(fecha) {
+    return reservas
+        .filter(r => r.fecha === fecha)
+        .sort((a, b) => a.horario.localeCompare(b.horario));
+}
+
+// Función para buscar reservas por cualquier campo
+function buscarReservas(criterio) {
+    return reservas.filter(reserva => {
+        return Object.keys(reserva).some(key => {
+            if (typeof reserva[key] === 'string') {
+                return reserva[key].toLowerCase().includes(criterio.toLowerCase());
+            }
+            return false;
+        });
+    });
+}
+
+window.Barberia = {
+  servicios: servicios,
+  barberos: barberos,
+  reservas: JSON.parse(localStorage.getItem('reservas')) || [],
+  obtenerReservasPorFecha: obtenerReservasPorFecha,
+  registrarReserva: registrarReserva,
+  obtenerServicioPorId: obtenerServicioPorId,
+  obtenerBarberoPorId: obtenerBarberoPorId,
+  obtenerBarberosPorServicio: obtenerBarberosPorServicio,
+  validarEmail: validarEmail,
+  generarHorarios: generarHorarios,
+  encontrarBarberoDisponible: encontrarBarberoDisponible
+};
