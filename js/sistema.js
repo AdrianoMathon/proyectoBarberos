@@ -1,9 +1,10 @@
 var servicios = [
-    { id: 1, nombre: "Corte de cabello", precio: 1500, duracion: 30 },
-    { id: 2, nombre: "Afeitado clásico", precio: 1200, duracion: 30 },
-    { id: 3, nombre: "Corte y barba", precio: 2500, duracion: 60 },
-    { id: 4, nombre: "Tinte para cabello", precio: 1800, duracion: 90 },
-    { id: 5, nombre: "Peinado especial", precio: 1000, duracion: 30 }
+    { id: 1, nombre: "Corte tradicional"},
+    { id: 2, nombre: "Corte moderno"},
+    { id: 3, nombre: "Corte de barba"},
+    { id: 4, nombre: "Afeitado"},
+    { id: 5, nombre: "Corte de niño"},
+    { id: 6, nombre: "Color" }
 ];
 
 var barberos = [

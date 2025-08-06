@@ -31,7 +31,7 @@ function cargarServicios() {
     servicios.forEach(function(servicio) {
         var option = document.createElement("option");
         option.value = servicio.id;
-        option.textContent = servicio.nombre + " (" + servicio.duracion + " min) - $" + servicio.precio;
+        option.textContent = servicio.nombre /*+ " (" + servicio.duracion + " min) - $" + servicio.precio;*/
         selectServicio.appendChild(option);
     });
 }
