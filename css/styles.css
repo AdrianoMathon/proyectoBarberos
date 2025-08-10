@@ -5,6 +5,7 @@
     /*colores*/
     --color-principal: #a5884a;
     --color-secundario: #e3b759;
+    --fondo-claro: #fffbea;
     --gris: #575756;
     --blanco: white;
     --negro: black;
@@ -17,7 +18,6 @@
 * {
     margin: 0;
     padding: 0;
-
 }
 
 html {
@@ -104,12 +104,13 @@ header nav ul a:hover {
     width: 100%;
 }
 
-.contenedor-reserva, .contenedor-contacto {
+.contenedor-reserva,
+.contenedor-contacto {
     width: 1200px;
     margin: 0 auto
 }
 
-.contenedor-reserva h2, .contenedor-contacto h2 {
+.contenedor-reserva h2 {
     font-family: var(--font-titulos);
     font-weight: 400;
     font-size: 2.5rem;
@@ -167,7 +168,7 @@ header nav ul a:hover {
     flex: 1;
 }
 
-.contenedor-form-reservas button{
+.contenedor-form-reservas button {
     text-decoration: none;
     font-family: var(--font-textos);
     font-size: 1rem;
@@ -178,27 +179,76 @@ header nav ul a:hover {
     border-radius: 10px;
 }
 
-.contenedor-form-reservas button:hover{
-background-color: var(--color-secundario);
+.contenedor-form-reservas button:hover {
+    background-color: var(--color-secundario);
     transform: scale(1.01);
     transition: 0.4s;
 }
 
+#seccionContacto {
+    background-color: var(--fondo-claro);
+    width: 100%;
+}
+
+.contenedor-contacto {
+    padding-bottom: 80px;
+}
+
+.contenedor-contacto h2 {
+    font-family: var(--font-titulos);
+    font-weight: 400;
+    font-size: 2.5rem;
+    color: var(--color-principal);
+    padding-top: 80px;
+    margin-bottom: 30px;
+}
+
+.mapa-infocontacto {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.mapa {
+    flex: 2;
+    height: 380px;
+}
+
+.info-contacto {
+    flex: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.item-contacto {
+    display: flex;
+    align-items:center;
+    margin-bottom: 18px;
+}
+
+.icono {
+    width: 25px;
+    font-size: 1.5rem;
+    color: var(--color-secundario);
+}
+
+.texto {
+    font-size: 1rem;
+    font-family: var(--font-textos);
+    color: var(--negro);
+    margin-left: 12px;
+    
+}
 
 
-
-
-
-/*NUEVO*/
-
-/* Estilos para el footer */
 footer {
     font-family: var(--font-textos);
     background-color: #333;
     color: white;
     text-align: center;
     padding: 20px 0;
-    margin-top: 40px;
 }
 
 .footer-content {
