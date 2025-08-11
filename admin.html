@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Panel de Administración - Barbería</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="index.html">Volver al inicio</a></li>
-        </ul>
-      </nav>
-    </header>
-    <div class="admin-container">
-      <h1>Panel de Administración</h1>
 
-      <div id="loginForm">
-        <h2>Iniciar Sesión</h2>
-        <div class="form-group">
-          <label for="adminUser">Usuario:</label>
-          <input type="text" id="adminUser" required />
-        </div>
-        <div class="form-group">
-          <label for="adminPass">Contraseña:</label>
-          <input type="password" id="adminPass" required />
-        </div>
-        <button id="btnLogin">Ingresar</button>
-        <p id="loginMessage" class="error-message"></p>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - Barbería</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
 
-      <div id="reservasPanel" style="display: none">
-        <h2>Reservas del Día: <span id="fechaActual"></span></h2>
-        <div id="reservasList"></div>
-        <button id="btnLogout">Cerrar Sesión</button>
+<body>
+  <div class="volver-inicio">
+    <a href="index.html">Volver al inicio</a>
+  </div>
+  <div class="admin-container">
+
+    <h1>Panel de Administración</h1>
+
+    <div id="loginForm">
+      <h2>Iniciar Sesión</h2><br>
+      <div class="form-group">
+        <label for="adminUser">Usuario:</label>
+        <input type="text" id="adminUser" required />
       </div>
+      <div class="form-group">
+        <label for="adminPass">Contraseña:</label>
+        <input type="password" id="adminPass" required />
+      </div>
+      <button id="btnLogin">Ingresar</button>
+      <p id="loginMessage" class="error-message"></p>
     </div>
 
-    <script src="js/sistema.js"></script>
-    <script src="js/admin.js"></script>
-  </body>
+    <div id="reservasPanel" style="display: none">
+      <h2>Reservas del Día: <span id="fechaActual"></span></h2>
+      <div id="reservasList"></div>
+      <button id="btnLogout">Cerrar Sesión</button>
+    </div>
+
+  </div>
+
+
+  <script src="js/sistema.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+
 </html>

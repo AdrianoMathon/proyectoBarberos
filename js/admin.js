@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const user = adminUserInput.value.trim();
     const pass = adminPassInput.value.trim();
     
-    if (user === 'admin' && pass === 'admin') {
+    if (user === 'admin' && pass === 'barberia') {
       loginExitoso();
     } else {
       mostrarError('Usuario o contraseña incorrectos');

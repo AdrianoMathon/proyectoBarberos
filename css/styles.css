@@ -224,7 +224,7 @@ header nav ul a:hover {
 
 .item-contacto {
     display: flex;
-    align-items:center;
+    align-items: center;
     margin-bottom: 18px;
 }
 
@@ -239,7 +239,7 @@ header nav ul a:hover {
     font-family: var(--font-textos);
     color: var(--negro);
     margin-left: 12px;
-    
+
 }
 
 
@@ -268,7 +268,77 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Estilos para el panel de administración */
+@media screen and (max-width: 767px) {
+    
+    /* Contenedores más fluidos */
+    .contenedor-reserva,
+    .contenedor-contacto {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+
+    .banner {
+
+        background-position: top;
+        padding-top: 120px;
+    }
+
+    /* Banner más chico */
+    .banner h1 {
+        font-size: 2rem;
+        padding: 20px;
+    }
+
+    /* Formularios */
+    .contenedor-form-reservas {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 15px 50px;
+        box-sizing: border-box;
+    }
+
+    /* Campos fecha/hora en columna */
+    .campos-fecha-hora {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    /* Mapa y datos en columna */
+    .mapa-infocontacto {
+        flex-direction: column;
+    }
+
+    .mapa {
+        flex: unset;
+        width: 100%;
+        height: 300px;
+    }
+
+    .info-contacto {
+        flex: unset;
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    /* Header vertical */
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* Estilos para el panel de administración 
 .admin-container {
     max-width: 1000px;
     margin: 40px auto;
@@ -339,17 +409,34 @@ th {
 
 tr:nth-child(even) {
     background-color: #f2f2f2;
-}
+}*/
 
 
 /* Estilos para el panel de administración */
 .admin-container {
-    max-width: 900px;
-    margin: 2rem auto;
+    font-family: var(--font-textos);
+    max-width: 800px;
+    margin: auto;
     padding: 2rem;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.volver-inicio {
+    margin: 30px;
+}
+
+.volver-inicio a {
+    text-decoration: none;
+    font-family: var(--font-textos);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--blanco);
+    background-color: var(--gris);
+    padding: 12px;
+    border-radius: 10px;
+
 }
 
 #loginForm {
