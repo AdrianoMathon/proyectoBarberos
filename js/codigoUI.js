@@ -9,6 +9,17 @@ function misEventos() {
     fechaInput.min = hoy.toISOString().split('T')[0];
     fechaInput.max = maxFecha.toISOString().split('T')[0];
     
+    // Deshabilitar sábados y domingos en el datepicker
+    fechaInput.addEventListener("change", function() {
+        var selectedDate = new Date(this.value);
+        var dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
+
+        if (dayOfWeek === 5 || dayOfWeek === 6) {
+            this.value = ""; // Limpiar la selección si es fin de semana
+            mostrarMensaje("No se pueden realizar reservas los sábados y domingos", "error");
+        }
+    });
+    
     // Cargar servicios en el select
     cargarServicios();
     
@@ -132,6 +143,13 @@ function registrarReservaUI() {
         mostrarMensaje("Por favor complete todos los campos", "error");
         return;
     }
+
+    // Validar teléfono
+    if (!validarTelefono(telefono)) {
+        mostrarMensaje("El teléfono debe contener solo números y tener al menos 8 dígitos", "error");
+        return;
+    }
+
 
     if (!validarEmail(email)) {
         mostrarMensaje("Por favor ingrese un email válido", "error");

@@ -63,6 +63,14 @@ function validarEmail(email) {
     return re.test(email);
 }
 
+function validarTelefono(telefono) {
+    // Eliminar espacios en blanco si los hubiera
+    telefono = telefono.replace(/\s/g, '');
+    
+    // Verificar que solo contenga números y tenga al menos 8 dígitos
+    return /^\d{8,}$/.test(telefono);
+}
+
 // Registrar una nueva reserva
 function registrarReserva(reserva) {
     // Verificar si el barbero ya tiene reserva en ese horario
