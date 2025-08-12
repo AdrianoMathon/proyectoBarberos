@@ -239,13 +239,11 @@ header nav ul a:hover {
     font-family: var(--font-textos);
     color: var(--negro);
     margin-left: 12px;
-
 }
-
 
 footer {
     font-family: var(--font-textos);
-    background-color: #333;
+    background-color: var(--negro);
     color: white;
     text-align: center;
     padding: 20px 0;
@@ -268,9 +266,8 @@ footer a:hover {
     text-decoration: underline;
 }
 
-@media screen and (max-width: 767px) {
-    
-    /* Contenedores más fluidos */
+@media screen and (max-width: 768px) {
+
     .contenedor-reserva,
     .contenedor-contacto {
         width: 100%;
@@ -280,18 +277,18 @@ footer a:hover {
     }
 
     .banner {
-
-        background-position: top;
-        padding-top: 120px;
+        background-position: left;
+        background-repeat: no-repeat;
+        width: 100%;
+        min-height: 300px;
     }
 
-    /* Banner más chico */
     .banner h1 {
         font-size: 2rem;
-        padding: 20px;
+        padding: 30px;
+        margin-top: 70px;
     }
 
-    /* Formularios */
     .contenedor-form-reservas {
         width: 100%;
         max-width: 100%;
@@ -299,13 +296,11 @@ footer a:hover {
         box-sizing: border-box;
     }
 
-    /* Campos fecha/hora en columna */
     .campos-fecha-hora {
         flex-direction: column;
         gap: 0.7rem;
     }
 
-    /* Mapa y datos en columna */
     .mapa-infocontacto {
         flex-direction: column;
     }
@@ -319,100 +314,79 @@ footer a:hover {
     .info-contacto {
         flex: unset;
         width: 100%;
-        padding: 10px 0;
+        padding: 12px 0 30px 0;
     }
 
-    /* Header vertical */
+    .item-contacto {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .icono {
+        font-size: 1.1rem;
+        color: var(--color-secundario);
+        padding-left: 15px;
+    }
+
+    .texto {
+        font-size: 1rem;
+        font-family: var(--font-textos);
+        color: var(--negro);
+        margin-left: 5px;
+    }
+
     header {
         flex-direction: column;
         align-items: center;
     }
 
-    
     header nav ul {
-        flex-direction: column;
-        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 10px;
         margin: 0;
+        margin-top: 20px;
         padding: 0;
+    }
+
+    .contenedor-reserva h2 {
+        font-family: var(--font-titulos);
+        font-weight: 400;
+        font-size: 2.5rem;
+        color: var(--color-secundario);
+        padding-top: 50px;
+        margin-bottom: 30px;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .contenedor-contacto h2 {
+        font-family: var(--font-titulos);
+        font-weight: 400;
+        font-size: 2.5rem;
+        color: var(--color-principal);
+        padding-top: 50px;
+        margin-bottom: 30px;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
     }
 }
 
-/* Estilos para el panel de administración 
-.admin-container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-button {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #555;
-}
-
-.error-message {
-    color: red;
-    margin-top: 10px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table,
-th,
-td {
-    border: 1px solid #ddd;
-}
-
-th,
-td {
-    padding: 12px;
-    text-align: left;
-}
-
-th {
-    background-color: #333;
-    color: white;
-}
-
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}*/
-
-
-/* Estilos para el panel de administración */
+/* panel de administración */
 .admin-container {
     font-family: var(--font-textos);
     max-width: 800px;
@@ -526,3 +500,51 @@ tr:hover {
     background: #ffebee;
     border-radius: 4px;
 }
+
+#mensaje-flotante {
+position: fixed;
+  top: 40px;
+  right: 40px;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 300px;
+  z-index: 1000;
+  color: white;
+  display: none;
+  font-family: var(--font-textos);
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+#mensaje-flotante.success {
+  background-color: #4CAF50;
+  padding: 50px;
+}
+
+#mensaje-flotante.error {
+  background-color: #ce4116;
+}
+
+#contenedor-mensajes {
+    text-align: center;
+    padding: 10px;
+    min-height: 40px; /* espacio reservado aunque no haya mensaje */
+}
+
+#contenedor-mensajes .mensaje {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#contenedor-mensajes .success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#contenedor-mensajes .error {
+    background-color: #f44336;
+    color: white;
+}
+

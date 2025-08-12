@@ -1,22 +1,35 @@
 // Función principal que carga los eventos
 function misEventos() {
-    // Configurar fechas (hoy y máximo 4 semanas)
+        // Configurar fechas (mañana como mínimo y máximo 4 semanas)
     var fechaInput = document.querySelector("#fecha");
     var hoy = new Date();
+    var manana = new Date();
+    manana.setDate(hoy.getDate() + 1); // Día mínimo será mañana
     var maxFecha = new Date();
     maxFecha.setDate(hoy.getDate() + 28); // 4 semanas = 28 días
     
-    fechaInput.min = hoy.toISOString().split('T')[0];
+    fechaInput.min = manana.toISOString().split('T')[0]; // Establecer mínimo como mañana
     fechaInput.max = maxFecha.toISOString().split('T')[0];
     
-    // Deshabilitar sábados y domingos en el datepicker
+    // Deshabilitar sábados, domingos y el día actual
     fechaInput.addEventListener("change", function() {
         var selectedDate = new Date(this.value);
         var dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
-
-        if (dayOfWeek === 5 || dayOfWeek === 6) {
+        var selectedDay = selectedDate.getDate();
+        var selectedMonth = selectedDate.getMonth();
+        var selectedYear = selectedDate.getFullYear();
+        
+        // Comprobar si es fin de semana
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
             this.value = ""; // Limpiar la selección si es fin de semana
             mostrarMensaje("No se pueden realizar reservas los sábados y domingos", "error");
+        }
+        // Comprobar si es el día actual (aunque el input no debería permitirlo)
+        else if (selectedDay === hoy.getDate() && 
+                 selectedMonth === hoy.getMonth() && 
+                 selectedYear === hoy.getFullYear()) {
+            this.value = ""; // Limpiar la selección si es hoy
+            mostrarMensaje("No se pueden realizar reservas para el día actual", "error");
         }
     });
     
@@ -150,7 +163,6 @@ function registrarReservaUI() {
         return;
     }
 
-
     if (!validarEmail(email)) {
         mostrarMensaje("Por favor ingrese un email válido", "error");
         return;
@@ -186,7 +198,7 @@ function registrarReservaUI() {
     try {
         registrarReserva(reserva);
         mostrarMensaje(
-            `✅ Reserva exitosa:<br>
+            `<b>Reserva exitosa:</b><br><br>
             📅 ${fecha} a las ${horario}<br>
             💈 ${barbero.nombre}<br>
             ✂️ ${servicio.nombre}`,
@@ -197,31 +209,28 @@ function registrarReservaUI() {
     }
 }
 
-// Función para mostrar mensajes (mejorada)
+
 function mostrarMensaje(mensaje, tipo) {
     let mensajeDiv = document.getElementById('mensaje-flotante');
     if (!mensajeDiv) {
         mensajeDiv = document.createElement('div');
         mensajeDiv.id = 'mensaje-flotante';
-        mensajeDiv.style.position = 'fixed';
-        mensajeDiv.style.top = '20px';
-        mensajeDiv.style.right = '20px';
-        mensajeDiv.style.padding = '15px';
-        mensajeDiv.style.borderRadius = '5px';
-        mensajeDiv.style.zIndex = '1000';
-        mensajeDiv.style.maxWidth = '300px';
         document.body.appendChild(mensajeDiv);
     }
 
     mensajeDiv.innerHTML = mensaje;
-    mensajeDiv.style.backgroundColor = tipo === 'success' ? '#4CAF50' : '#f44336';
-    mensajeDiv.style.color = 'white';
+
+    mensajeDiv.classList.remove('success', 'error');  
+    mensajeDiv.classList.add(tipo);                   
+
     mensajeDiv.style.display = 'block';
 
     setTimeout(() => {
         mensajeDiv.style.display = 'none';
-    }, 5000);
+    }, 8000);
 }
+
+
 
 // Llamar a la función principal cuando el DOM esté cargado
 document.addEventListener("DOMContentLoaded", misEventos);

@@ -81,7 +81,7 @@ function registrarReserva(reserva) {
     );
     
     if (barberoOcupado) {
-        throw new Error(`El barbero ${reserva.barbero} ya tiene una reserva a las ${reserva.horario}. 
+        throw new Error(`El barbero ${reserva.barbero} ya tiene una reserva a las ${reserva.horario}.<br> 
                        Por favor elija otro barbero u otro horario.`);
     }
     
