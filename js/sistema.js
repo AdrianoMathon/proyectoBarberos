@@ -8,20 +8,64 @@ var servicios = [
 ];
 
 var barberos = [
-    { id: 1, nombre: "Juan Pérez", servicios: [1, 2, 3, 4, 5] },
-    { id: 2, nombre: "Carlos Gómez", servicios: [1, 2, 3, 4, 5] },
-    { id: 3, nombre: "Luis Rodríguez", servicios: [1, 2, 3, 4, 5] },
-    { id: 4, nombre: "Miguel Martínez", servicios: [1, 2, 3, 4, 5] }
+    { id: 1, nombre: "Miguel Martínez", servicios: [1, 2, 3, 4, 5, 6] },
+    { id: 2, nombre: "Carlos Gómez", servicios: [1, 2, 3, 4, 5, 6] },
+    { id: 3, nombre: "Luis Rodríguez", servicios: [1, 2, 3, 4, 5, 6] },
 ];
 
-// Variables para almacenar reservas
-var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+// Reservas iniciales precargadas
+var reservas = [
+    {
+        fecha: "2025-08-14",
+        horario: "09:00",
+        servicioId: 2,
+        servicio: "Corte moderno",
+        barberoId: 1,
+        barbero: "Miguel Martínez",
+        nombreCliente: "Leonardo Fernández",
+        email: "leonardo@gmail.com",
+        telefono: "091434567"
+    },
+    {
+        fecha: "2025-08-14",
+        horario: "09:30",
+        servicioId: 1,
+        servicio: "Corte tradicional",
+        barberoId: 2,
+        barbero: "Carlos Gómez",
+        nombreCliente: "Lucas Hernández",
+        email: "lucas@gmail.com",
+        telefono: "098765432"
+    },
+    {
+        fecha: "2025-08-14",
+        horario: "11:30",
+        servicioId: 6,
+        servicio: "Color",
+        barberoId: 1,
+        barbero: "Miguel Martínez",
+        nombreCliente: "Javier Cabrera",
+        email: "javier@gmail.com",
+        telefono: "098823789"
+    },
+    {
+        fecha: "2025-08-14",
+        horario: "15:30",
+        servicioId: 2,
+        servicio: "Corte moderno",
+        barberoId: 3,
+        barbero: "Luis Rodríguez",
+        nombreCliente: "Maximiliano Silvera",
+        email: "maximiliano@gmail.com",
+        telefono: "098923456"
+    }
+];
 
 // Generar horarios disponibles (9:00 a 17:30 cada 30 minutos)
 function generarHorarios() {
     var horarios = [];
-    var horaInicio = 9 * 60; // 9:00 en minutos
-    var horaFin = 17 * 60 + 30; // 17:30 en minutos
+    var horaInicio = 9 * 60;
+    var horaFin = 17 * 60 + 30;
     
     for (var minutos = horaInicio; minutos <= horaFin; minutos += 30) {
         var horas = Math.floor(minutos / 60);
@@ -29,18 +73,14 @@ function generarHorarios() {
         var horaFormateada = (horas < 10 ? '0' + horas : horas) + ':' + (mins < 10 ? '0' + mins : mins);
         horarios.push(horaFormateada);
     }
-    
     return horarios;
 }
 
-// Encontrar barbero disponible para un horario específico
 function encontrarBarberoDisponible(servicioId, fecha, horario) {
-    // Obtener todos los barberos que ofrecen este servicio
     var barberosParaServicio = barberos.filter(function(b) {
         return b.servicios.includes(servicioId);
     });
     
-    // Buscar el primer barbero que no tenga reserva en ese horario
     for (var i = 0; i < barberosParaServicio.length; i++) {
         var barbero = barberosParaServicio[i];
         var tieneReserva = reservas.some(function(r) { 
@@ -53,27 +93,20 @@ function encontrarBarberoDisponible(servicioId, fecha, horario) {
             return barbero;
         }
     }
-    
-    return null; // No hay barberos disponibles
+    return null;
 }
 
-// Validar formato de email
 function validarEmail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
 function validarTelefono(telefono) {
-    // Eliminar espacios en blanco si los hubiera
     telefono = telefono.replace(/\s/g, '');
-    
-    // Verificar que solo contenga números y tenga al menos 8 dígitos
-    return /^\d{8,}$/.test(telefono);
+    return /^\d{8,9}$/.test(telefono);
 }
 
-// Registrar una nueva reserva
 function registrarReserva(reserva) {
-    // Verificar si el barbero ya tiene reserva en ese horario
     const barberoOcupado = reservas.some(r => 
         r.fecha === reserva.fecha && 
         r.horario === reserva.horario && 
@@ -85,67 +118,34 @@ function registrarReserva(reserva) {
                        Por favor elija otro barbero u otro horario.`);
     }
     
-    // Agregar a la lista de reservas
     reservas.push(reserva);
-    localStorage.setItem('reservas', JSON.stringify(reservas));
     return reserva;
 }
 
-// Obtener servicio por ID
 function obtenerServicioPorId(id) {
     return servicios.find(function(s) {
         return s.id === id;
     });
 }
 
-// Obtener barbero por ID
 function obtenerBarberoPorId(id) {
     return barberos.find(function(b) {
         return b.id === id;
     });
 }
 
-// Obtener barberos por servicio
 function obtenerBarberosPorServicio(servicioId) {
     return barberos.filter(function(b) {
         return b.servicios.includes(servicioId);
     });
 }
 
-// Obtener reservas por fecha
-function obtenerReservasPorFecha(fecha) {
-    return reservas.filter(function(r) {
-        return r.fecha === fecha;
-    });
-}
-
-
-if (typeof module !== 'undefined') {
-    module.exports = {
-        registrarReserva,
-        encontrarBarberoDisponible,
-        obtenerServicioPorId,
-        obtenerBarberoPorId,
-        obtenerBarberosPorServicio,
-        obtenerReservasPorFecha,
-        validarEmail,
-        generarHorarios,
-        servicios,
-        barberos,
-        buscarReservas,
-        // expone reservas para inspección o reinicio en los tests
-        __reservaData__: { reservas }
-    };
-}
-
-// Obtener reservas por fecha ordenadas por hora
 function obtenerReservasPorFecha(fecha) {
     return reservas
         .filter(r => r.fecha === fecha)
         .sort((a, b) => a.horario.localeCompare(b.horario));
 }
 
-// Función para buscar reservas por cualquier campo
 function buscarReservas(criterio) {
     return reservas.filter(reserva => {
         return Object.keys(reserva).some(key => {
@@ -160,7 +160,7 @@ function buscarReservas(criterio) {
 window.Barberia = {
   servicios: servicios,
   barberos: barberos,
-  reservas: JSON.parse(localStorage.getItem('reservas')) || [],
+  reservas: reservas,
   obtenerReservasPorFecha: obtenerReservasPorFecha,
   registrarReserva: registrarReserva,
   obtenerServicioPorId: obtenerServicioPorId,

@@ -1,47 +1,61 @@
 // Función principal que carga los eventos
 function misEventos() {
-        // Configurar fechas (mañana como mínimo y máximo 4 semanas)
+    function yyyyMmDdLocal(d) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    function parseDateInput(value) {
+        const [y, m, d] = value.split('-').map(Number);
+        return new Date(y, m - 1, d);
+    }
+
+    // Configurar fechas (mañana como mínimo y máximo 4 semanas)
     var fechaInput = document.querySelector("#fecha");
     var hoy = new Date();
     var manana = new Date();
     manana.setDate(hoy.getDate() + 1); // Día mínimo será mañana
     var maxFecha = new Date();
     maxFecha.setDate(hoy.getDate() + 28); // 4 semanas = 28 días
-    
-    fechaInput.min = manana.toISOString().split('T')[0]; // Establecer mínimo como mañana
-    fechaInput.max = maxFecha.toISOString().split('T')[0];
-    
+
+    fechaInput.min = yyyyMmDdLocal(manana);
+    fechaInput.max = yyyyMmDdLocal(maxFecha);
+
     // Deshabilitar sábados, domingos y el día actual
-    fechaInput.addEventListener("change", function() {
-        var selectedDate = new Date(this.value);
-        var dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
-        var selectedDay = selectedDate.getDate();
-        var selectedMonth = selectedDate.getMonth();
-        var selectedYear = selectedDate.getFullYear();
-        
-        // Comprobar si es fin de semana
+    fechaInput.addEventListener("change", function () {
+        if (!this.value) return;
+
+        var selectedDate = parseDateInput(this.value);
+        var dayOfWeek = selectedDate.getDay();
+
+        // Finde (Domingo = 0, Sábado = 6)
         if (dayOfWeek === 0 || dayOfWeek === 6) {
-            this.value = ""; // Limpiar la selección si es fin de semana
+            this.value = "";
             mostrarMensaje("No se pueden realizar reservas los sábados y domingos", "error");
         }
-        // Comprobar si es el día actual (aunque el input no debería permitirlo)
-        else if (selectedDay === hoy.getDate() && 
-                 selectedMonth === hoy.getMonth() && 
-                 selectedYear === hoy.getFullYear()) {
-            this.value = ""; // Limpiar la selección si es hoy
-            mostrarMensaje("No se pueden realizar reservas para el día actual", "error");
+        // Bloquear día actual
+        else {
+            var hoyLocal = new Date();
+            if (selectedDate.getFullYear() === hoyLocal.getFullYear() &&
+                selectedDate.getMonth() === hoyLocal.getMonth() &&
+                selectedDate.getDate() === hoyLocal.getDate()) {
+                this.value = "";
+                mostrarMensaje("No se pueden realizar reservas para el día actual", "error");
+            }
         }
     });
-    
+
     // Cargar servicios en el select
     cargarServicios();
-    
+
     // Evento para cambiar de servicio
     document.querySelector("#txtServicio").addEventListener("change", cargarBarberos);
-    
+
     // Evento para el botón de reserva
     document.querySelector("#btnReservas").addEventListener("click", registrarReservaUI);
-    
+
     // Cargar horarios cuando se selecciona fecha
     document.querySelector("#fecha").addEventListener("change", cargarHorariosDisponibles);
 
@@ -51,8 +65,8 @@ function misEventos() {
 // Cargar servicios en el select
 function cargarServicios() {
     var selectServicio = document.querySelector("#txtServicio");
-    
-    servicios.forEach(function(servicio) {
+
+    servicios.forEach(function (servicio) {
         var option = document.createElement("option");
         option.value = servicio.id;
         option.textContent = servicio.nombre /*+ " (" + servicio.duracion + " min) - $" + servicio.precio;*/
@@ -64,24 +78,24 @@ function cargarServicios() {
 function cargarBarberos() {
     var servicioId = parseInt(document.querySelector("#txtServicio").value);
     var selectBarbero = document.querySelector("#txtBarbero");
-    
+
     // Limpiar opciones anteriores (excepto la primera)
     while (selectBarbero.options.length > 1) {
         selectBarbero.remove(1);
     }
-    
+
     if (!servicioId) return;
-    
+
     // Agregar opción "Aleatorio"
     var optionAleatorio = document.createElement("option");
     optionAleatorio.value = "aleatorio";
     optionAleatorio.textContent = "Aleatorio (asignaremos el primer disponible)";
     selectBarbero.appendChild(optionAleatorio);
-    
+
     // Agregar barberos que ofrecen este servicio
     var barberosDisponibles = obtenerBarberosPorServicio(servicioId);
-    
-    barberosDisponibles.forEach(function(barbero) {
+
+    barberosDisponibles.forEach(function (barbero) {
         var option = document.createElement("option");
         option.value = barbero.id;
         option.textContent = barbero.nombre;
@@ -94,41 +108,41 @@ function cargarHorariosDisponibles() {
     var fecha = document.querySelector("#fecha").value;
     var horarioSelect = document.querySelector("#txtHorario");
     var barberoId = document.querySelector("#txtBarbero").value;
-    
+
     if (!fecha) return;
-    
+
     // Limpiar horarios anteriores (excepto la primera opción)
     while (horarioSelect.options.length > 1) {
         horarioSelect.remove(1);
     }
-    
+
     // Generar todos los horarios posibles
     var todosHorarios = generarHorarios();
-    
+
     // Obtener reservas para esta fecha
     var reservasFecha = obtenerReservasPorFecha(fecha);
-    
+
     // Agregar todos los horarios al select, marcando los ocupados
-    todosHorarios.forEach(function(horario) {
+    todosHorarios.forEach(function (horario) {
         var option = document.createElement("option");
         option.value = horario;
         option.textContent = horario;
-        
+
         // Verificar si el horario está ocupado para el barbero seleccionado
         if (barberoId && barberoId !== "aleatorio") {
-            var estaOcupado = reservasFecha.some(function(r) { 
+            var estaOcupado = reservasFecha.some(function (r) {
                 return r.horario === horario && r.barberoId === parseInt(barberoId);
             });
-            
+
             if (estaOcupado) {
                 option.disabled = true;
                 option.textContent += " (No disponible con este barbero)";
             }
         }
-        
+
         horarioSelect.appendChild(option);
     });
-    
+
     // Si no hay horarios disponibles (todos están deshabilitados)
     var hayDisponibles = Array.from(horarioSelect.options).some(opt => !opt.disabled);
     if (!hayDisponibles && horarioSelect.options.length > 1) {
@@ -159,7 +173,7 @@ function registrarReservaUI() {
 
     // Validar teléfono
     if (!validarTelefono(telefono)) {
-        mostrarMensaje("El teléfono debe contener solo números y tener al menos 8 dígitos", "error");
+        mostrarMensaje("Por favor ingrese un teléfono válido", "error");
         return;
     }
 
@@ -170,7 +184,7 @@ function registrarReservaUI() {
 
     // Obtener datos del servicio y barbero
     const servicio = obtenerServicioPorId(servicioId);
-    const barbero = barberoId === "aleatorio" 
+    const barbero = barberoId === "aleatorio"
         ? encontrarBarberoDisponible(servicioId, fecha, horario)
         : obtenerBarberoPorId(parseInt(barberoId));
 
@@ -220,8 +234,8 @@ function mostrarMensaje(mensaje, tipo) {
 
     mensajeDiv.innerHTML = mensaje;
 
-    mensajeDiv.classList.remove('success', 'error');  
-    mensajeDiv.classList.add(tipo);                   
+    mensajeDiv.classList.remove('success', 'error');
+    mensajeDiv.classList.add(tipo);
 
     mensajeDiv.style.display = 'block';
 

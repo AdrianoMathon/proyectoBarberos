@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Elementos del DOM
   const loginForm = document.getElementById('loginForm');
   const reservasPanel = document.getElementById('reservasPanel');
@@ -10,15 +10,22 @@ document.addEventListener('DOMContentLoaded', function() {
   const adminUserInput = document.getElementById('adminUser');
   const adminPassInput = document.getElementById('adminPass');
 
+  function yyyyMmDdLocal(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
   // Mostrar fecha actual
   const hoy = new Date();
   fechaActual.textContent = formatearFecha(hoy);
 
   // Evento de login
   btnLogin.addEventListener('click', handleLogin);
-  
+
   // Login con Enter
-  adminPassInput.addEventListener('keypress', function(e) {
+  adminPassInput.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') handleLogin();
   });
 
@@ -29,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function handleLogin() {
     const user = adminUserInput.value.trim();
     const pass = adminPassInput.value.trim();
-    
+
     if (user === 'admin' && pass === 'barberia') {
       loginExitoso();
     } else {
@@ -66,31 +73,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Formatear fecha
   function formatearFecha(fecha) {
-    const opciones = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    const opciones = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     };
     return fecha.toLocaleDateString('es-ES', opciones);
   }
 
   // Cargar reservas del día
   function cargarReservasDelDia() {
-    const hoyFormatted = hoy.toISOString().split('T')[0];
-    
+    const hoyFormatted = yyyyMmDdLocal(hoy);
+
+
     try {
       if (!window.Barberia || !window.Barberia.obtenerReservasPorFecha) {
         throw new Error('No se pudo acceder a los datos de reservas');
       }
-      
+
       const reservasHoy = window.Barberia.obtenerReservasPorFecha(hoyFormatted);
-      
+
       if (!reservasHoy || reservasHoy.length === 0) {
         reservasList.innerHTML = '<p class="no-reservas">No hay reservas para hoy.</p>';
         return;
       }
-      
+
       let html = `
         <table>
           <thead>
@@ -104,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </thead>
           <tbody>
       `;
-      
+
       reservasHoy.forEach(reserva => {
         html += `
           <tr>
@@ -116,10 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
           </tr>
         `;
       });
-      
+
       html += '</tbody></table>';
       reservasList.innerHTML = html;
-      
+
     } catch (error) {
       console.error('Error al cargar reservas:', error);
       reservasList.innerHTML = `
